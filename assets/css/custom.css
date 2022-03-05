@@ -1,0 +1,28 @@
+.opacity-50 {
+  opacity: 0.5;
+}
+.opacity-25 {
+  opacity: 0.25;
+}
+.opacity-75 {
+  opacity: 0.75;
+}
+
+.fontsize-30 {
+  font-size: 30px;
+}
+
+.btn-outline-success:hover {
+  color: white;
+  background-color: red;
+  border-color: red;
+}
+.btn-outline-success:hover:before {
+  content: attr(data-hover) " |";
+}
+
+body {
+  background-image: url(/BBOX.svg);
+  background-size: 20%;
+  background-color: black;
+}
