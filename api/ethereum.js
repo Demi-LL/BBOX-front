@@ -1,5 +1,5 @@
-export const askWalletPermissionAndReturnAccounts = async () => {
-  return await window.ethereum.request({
+export const askWalletPermissionAndReturnAccounts = async (eth) => {
+  return await eth.request({
     method: "eth_requestAccounts",
   });
 };

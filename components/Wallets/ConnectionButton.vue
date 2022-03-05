@@ -7,27 +7,21 @@ export default {
   computed: {
     ...mapGetters({
       account: "web3/account",
+      isConnected: "web3/isConnected",
     }),
-
-    isConnected() {
-      return this.account ?? false;
-    },
   },
   methods: {
     ...mapActions({
       storeAccount: "web3/storeAccount",
     }),
     async link() {
-      if (typeof window.ethereum !== "undefined") {
+      if (this.$WEB3.hasEthereum) {
         try {
-          const accounts = await askWalletPermissionAndReturnAccounts();
-
-          // 將 web3 物件儲存到自定義的 plugin 中
-          this.$WEB3.setInstance(new this.$Web3(window.ethereum));
+          const accounts = await askWalletPermissionAndReturnAccounts(
+            this.$WEB3.ethereum
+          );
 
           this.storeAccount(accounts[0]);
-
-          console.log(this.$WEB3.instance);
         } catch (error) {
           // User denied account access
           console.error("User denied web3 access", error);

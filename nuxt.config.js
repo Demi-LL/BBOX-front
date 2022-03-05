@@ -33,9 +33,6 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/bootstrap
     "bootstrap-vue/nuxt",
-
-    // https://github.com/bl0cknumber/nuxt-web3
-    "nuxt-web3",
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
