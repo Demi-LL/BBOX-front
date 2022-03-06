@@ -1,18 +1,32 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 
-import {} from "@/api/ethereum";
+import {
+  getMaxSupply,
+  getTotalSupply,
+  getBalanceOf,
+  mintNFT,
+} from "@/abi/BBOX";
 
 export default {
   data() {
     return {
+      maxSupply: 0,
       totalSupply: 0,
+      balanceOf: 0,
     };
   },
   created() {
-    if (!this.$WEB3.hasEthereum || !this.account) {
+    if (!this.$WEB3.hasEthereum) {
       return;
     }
+
+    this.getBBOXMetadata();
+  },
+  watch: {
+    account() {
+      this.getBBOXMetadata();
+    },
   },
   computed: {
     ...mapGetters({
@@ -22,6 +36,39 @@ export default {
   },
   methods: {
     ...mapActions({}),
+
+    /**
+     * 取得 BBOX 畫面上顯示的基本資料
+     */
+    getBBOXMetadata() {
+      getMaxSupply(this.$WEB3.contract).then((data) => (this.maxSupply = data));
+      getTotalSupply(this.$WEB3.contract).then(
+        (data) => (this.totalSupply = data)
+      );
+
+      if (this.account) {
+        getBalanceOf(this.$WEB3.contract, { owner: this.account }).then(
+          (data) => (this.balanceOf = data)
+        );
+      }
+    },
+    async mint() {
+      // TODO: loader
+      // TODO: event log
+      mintNFT(this.$WEB3.contract)
+        .then((data) => {
+          alert("鑄造成功，到 opensea 上看看吧！");
+        })
+        .catch((err) => {
+          console.log("error:", err);
+          alert("發生錯誤，請稍後再試");
+        })
+        .finally(() =>
+          getTotalSupply(this.$WEB3.contract).then(
+            (data) => (this.totalSupply = data)
+          )
+        );
+    },
   },
 };
 </script>
@@ -38,15 +85,27 @@ export default {
       <div class="row">
         <h2>Mint 資訊</h2>
         <div class="container">
-          <div class="row">haha</div>
+          <div class="row">
+            <div class="col">總發行量</div>
+            <div class="col">{{ maxSupply || "????" }}</div>
+          </div>
+          <div class="row">
+            <div class="col">已發行量</div>
+            <div class="col">{{ totalSupply || "????" }}</div>
+          </div>
+          <div class="row">
+            <div class="col">你已經擁有數量</div>
+            <div class="col">{{ balanceOf || "????" }}</div>
+          </div>
           <div class="row justify-content-center">
             <button
               class="btn btn-lg btn-primary col-auto"
               :class="{ 'disable-click': !isConnected }"
               type="button"
               :disabled="!isConnected"
+              @click="mint()"
             >
-              {{ isConnected ? "鑄造 NFT" : "連接錢包後才可操作" }}
+              {{ isConnected ? "立刻鑄造" : "連接錢包後才可操作" }}
             </button>
           </div>
         </div>
@@ -55,6 +114,13 @@ export default {
       <div class="row">
         <h2>項目成員</h2>
         <Members />
+      </div>
+      <hr />
+      <div class="row">
+        <p class="font-weight-bold">沒有測試用 eth 嗎？</p>
+        <a href="https://faucets.chain.link/rinkeby" target="_blank"
+          >來這裡拿一點吧</a
+        >
       </div>
     </div>
   </div>

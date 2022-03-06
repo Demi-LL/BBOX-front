@@ -4,7 +4,7 @@ const state = () => ({
 
 const getters = {
   account: (state) => state.account,
-  isConnected: (state) => state.account ?? false,
+  isConnected: (state) => state.account || false,
 };
 
 const actions = {
