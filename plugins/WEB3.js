@@ -21,13 +21,19 @@ Vue.prototype.$WEB3 = {
   instance,
   hasEthereum,
   setContract: function () {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
+    // ethers.js 版
+    // const provider = new ethers.providers.Web3Provider(ethereum);
+    // const signer = provider.getSigner();
+    // this.contract = new ethers.Contract(
+    //   process.env.BBOX_CONTRACT_ADDRESS,
+    //   contractInfo.abi,
+    //   signer
+    // );
 
-    this.contract = new ethers.Contract(
-      process.env.BBOX_CONTRACT_ADDRESS,
+    // web3.js 版
+    this.contract = new eth.Contract(
       contractInfo.abi,
-      signer
+      process.env.BBOX_CONTRACT_ADDRESS
     );
   },
   setInstance: function (ins) {

@@ -2,10 +2,10 @@
 import { mapActions, mapGetters } from "vuex";
 
 import {
+  mintNFT,
+  getBalanceOf,
   getMaxSupply,
   getTotalSupply,
-  getBalanceOf,
-  mintNFT,
 } from "@/abi/BBOX";
 
 export default {
@@ -55,19 +55,15 @@ export default {
     async mint() {
       // TODO: loader
       // TODO: event log
-      mintNFT(this.$WEB3.contract)
-        .then((data) => {
-          alert("鑄造成功，到 opensea 上看看吧！");
-        })
-        .catch((err) => {
-          console.log("error:", err);
-          alert("發生錯誤，請稍後再試");
-        })
-        .finally(() =>
-          getTotalSupply(this.$WEB3.contract).then(
-            (data) => (this.totalSupply = data)
-          )
-        );
+      mintNFT(this.$WEB3.contract, { owner: this.account }).catch((err) => {
+        console.log("error:", err);
+        alert("發生錯誤，請稍後再試");
+      });
+
+      this.$WEB3.contract.events.Transfer().on("data", () => {
+        alert("鑄造成功，到 opensea 上看看吧！");
+        this.getBBOXMetadata();
+      });
     },
   },
 };
