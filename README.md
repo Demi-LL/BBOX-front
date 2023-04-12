@@ -19,11 +19,14 @@ $ yarn generate
 
 ## Demo
 - home
-![home](./demo/home.gif)
+  <br>
+  ![home](./demo/home.gif)
 - mint
-![mint](./demo/mint.gif)
+  <br>
+  ![mint](./demo/mint.gif)
 - disconnect
-![disconnect](./demo/disconnect.gif)
+  <br>
+  ![disconnect](./demo/disconnect.gif)
 
 ## References
 
